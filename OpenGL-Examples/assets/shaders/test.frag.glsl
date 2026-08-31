@@ -3,9 +3,9 @@
 //       都会执行一次本程序,它的职责是:决定这个片元最终输出什么颜色。
 // 关键依赖: 由 ExampleLayer 用 Shader::FromGLSLTextFiles 从本文件加载并编译。
 //          外部(C++ 端)会设置 uniform vec4 u_Color。
-// GLSL 版本: #version 450 core 表示用 OpenGL 4.5 的核心模式 GLSL。
+// GLSL 版本: #version 410 core 表示用 OpenGL 4.1 的核心模式 GLSL(macOS 最高支持 4.1)。
 
-#version 450 core
+#version 410 core
 
 // layout(location = 0) 指定这个片元输出写入第 0 号颜色附件
 // (对应默认帧缓冲,即屏幕)。out 表示这是"片元输出变量";

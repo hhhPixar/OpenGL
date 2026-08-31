@@ -35,6 +35,7 @@ ExampleLayer::~ExampleLayer()
 void ExampleLayer::OnAttach()
 {
 	// 打开 OpenGL 的调试输出(遇到 GL 错误时打印诊断信息),方便开发期发现问题。
+	// 注意:macOS 最高 GL 4.1,不支持 4.3 的 KHR_debug,EnableGLDebugging 在 macOS 上是空操作。
 	EnableGLDebugging();
 
 	// 开启深度测试:绘制时根据片元的深度决定前后遮挡,避免后面的三角形错误地盖住前面的。
@@ -54,7 +55,7 @@ void ExampleLayer::OnAttach()
 
 	// ---- 顶点数组对象(VAO)---- 创建并绑定。VAO 会"记录"后续对顶点属性的所有状态设置,
 	//      以后只要重新 glBindVertexArray 这个 VAO,就能恢复整套属性配置,无需重新设置。
-	glCreateVertexArrays(1, &m_QuadVA);
+	glGenVertexArrays(1, &m_QuadVA);
 	glBindVertexArray(m_QuadVA);
 
 	// 四边形的 4 个顶点,每个顶点 3 个分量(x,y,z)。注意 z 都是 0,即四边形在 z=0 平面上。
@@ -68,7 +69,7 @@ void ExampleLayer::OnAttach()
 
 	// ---- 顶点缓冲对象(VBO)---- 在 GPU 上开辟一块缓冲区,把顶点数据传上去。
 	//      GL_ARRAY_BUFFER 表示"这块缓冲用作顶点属性数据源"。
-	glCreateBuffers(1, &m_QuadVB);
+	glGenBuffers(1, &m_QuadVB);
 	glBindBuffer(GL_ARRAY_BUFFER, m_QuadVB);
 	// sizeof(vertices) 是整个数组的字节数;GL_STATIC_DRAW 提示 GPU"这些数据基本不变",驱动会放到适合静态读取的内存。
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -87,9 +88,12 @@ void ExampleLayer::OnAttach()
 	uint32_t indices[] = { 0, 1, 2, 2, 3, 0 };
 	// ---- 索引缓冲对象(IBO)---- 绑到 GL_ELEMENT_ARRAY_BUFFER。
 	//      重要:IBO 必须在当前 VAO 已绑定时绑定,VAO 才会把它"记住",之后 glDrawElements 才能用到这些索引。
-	glCreateBuffers(1, &m_QuadIB);
+	glGenBuffers(1, &m_QuadIB);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_QuadIB);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// [诊断] 打印 shader/VAO/VBO/IBO 的 id,确认是否创建成功(非 0 表示有效)
+	LOG_INFO("[Diag] Shader={0} VAO={1} VB={2} IB={3}", m_Shader->GetRendererID(), m_QuadVA, m_QuadVB, m_QuadIB);
 }
 
 // OnDetach:层被移出层栈时调用一次,负责释放 OnAttach 里分配的 GPU 资源。

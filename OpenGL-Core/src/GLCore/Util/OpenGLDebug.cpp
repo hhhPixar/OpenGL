@@ -79,6 +79,11 @@ namespace GLCore::Utils {
 	// 启用 OpenGL 调试输出。应在创建好 GL 上下文后尽早调用一次。
 	void EnableGLDebugging()
 	{
+		// GL 调试输出(glDebugMessageCallback / GL_DEBUG_OUTPUT / GL_DEBUG_OUTPUT_SYNCHRONOUS)
+		// 是 OpenGL 4.3(KHR_debug)特性。macOS 最高只到 GL 4.1,这些调用在 macOS 的
+		// GL->Metal 转译层上会把 Metal 驱动楔死(进程进入不可中断等待,只能重启)。
+		// 故在 macOS 上整个函数做空操作,跳过 4.3 调试输出。
+#ifndef __APPLE__
 		// 注册回调：驱动有消息时就会调用 OpenGLLogMessage。第二个参数 userParam 传 nullptr。
 		glDebugMessageCallback(OpenGLLogMessage, nullptr);
 		// 打开调试输出开关。不开的话，驱动即使有错误也不会回调我们。
@@ -86,6 +91,7 @@ namespace GLCore::Utils {
 		// 让驱动同步触发回调（在出错的 GL 调用之后立即调用，而不是异步批量回调）。
 		// 同步模式下，断言命中时的调用栈正好停在出错位置附近，便于定位。
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+#endif
 	}
 
 }

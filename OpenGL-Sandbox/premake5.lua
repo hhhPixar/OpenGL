@@ -59,6 +59,29 @@ project "OpenGL-Sandbox"
 			"GLCORE_PLATFORM_WINDOWS"
 		}
 
+	-- macOS 平台:定义平台宏,显式链接 GLFW/Glad/ImGui 静态库(gmake 不传递静态库依赖),
+	-- 并链接 OpenGL/Cocoa 等系统框架(可执行文件需要)。
+	filter "system:macosx"
+		defines
+		{
+			"GLCORE_PLATFORM_MACOS"
+		}
+
+		links
+		{
+			"GLFW",
+			"Glad",
+			"ImGui"
+		}
+
+		linkoptions
+		{
+			"-framework OpenGL",
+			"-framework Cocoa",
+			"-framework CoreVideo",
+			"-framework IOKit"
+		}
+
 	-- Debug 配置:定义调试宏、用 Debug 运行时、开调试符号。
 	filter "configurations:Debug"
 		defines "GLCORE_DEBUG"

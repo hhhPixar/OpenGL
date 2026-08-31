@@ -84,7 +84,7 @@ namespace GLCore {
 	 *   GetEventType()  —— 虚函数 override,运行时通过对象返回真实类型(多态)。
 	 *   GetName()       —— 返回类型名字字符串,用于调试/日志。
 	 */
-#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
+#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
 								virtual EventType GetEventType() const override { return GetStaticType(); }\
 								virtual const char* GetName() const override { return #type; }
 

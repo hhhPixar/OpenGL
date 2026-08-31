@@ -61,9 +61,9 @@ namespace GLCore {
 		// ImGuiLayer 用它拦截鼠标按下事件——如果点击发生在 ImGui 窗口内,就"吃掉"事件不往下传。
 		// 注意:这里 OnEvent 不是 override(基类 Layer 的 OnEvent 已是虚函数),且带了类名前缀写法,
 		// 属于声明风格,实际仍为成员函数。
-		virtual void ImGuiLayer::OnEvent(Event& event);
+		virtual void OnEvent(Event& event) override;
 		// 专门处理"鼠标按下"事件。返回 true 表示事件已被 ImGui 处理,不应再传给下面的游戏层。
-		bool ImGuiLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 	private:
 		// m_Time 保存一个时间值,可用于以时间为基准的 UI 动画/计算(本引擎目前主要留给子类扩展)。
 		float m_Time = 0.0f;

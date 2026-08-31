@@ -39,7 +39,12 @@
  * 并且可以在 Release 下被完全替换为空（第二个 #define 分支），没有任何调用开销。
  */
 #ifdef GLCORE_ENABLE_ASSERTS
-	#define GLCORE_ASSERT(x, ...) { if(!(x)) { LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#ifdef _MSC_VER
+		#define GLCORE_DEBUGBREAK() __debugbreak()
+	#else
+		#define GLCORE_DEBUGBREAK() __builtin_debugtrap()
+	#endif
+	#define GLCORE_ASSERT(x, ...) { if(!(x)) { LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); GLCORE_DEBUGBREAK(); } }
 #else
 	#define GLCORE_ASSERT(x, ...)
 #endif

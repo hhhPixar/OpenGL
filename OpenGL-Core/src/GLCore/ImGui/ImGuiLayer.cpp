@@ -60,7 +60,10 @@ namespace GLCore {
 		// Docking:允许把多个面板拖拽停靠在一起组成大窗口(类似 IDE 的标签布局)。
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		// Viewports:允许 ImGui 窗口飘出主窗口,变成操作系统级别的独立窗口(多视口)。
+		// 注意:macOS 上 OpenGL 经 Metal 转译,多视口不稳定(易导致渲染异常或窗口无法关闭),故在 macOS 关闭。
+#ifndef __APPLE__
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+#endif
 
 		// ===== 2. 设置样式 =====
 		// StyleColorsDark 选一套深色主题配色。ImGui 自带几套配色函数,这是最常用的一种。

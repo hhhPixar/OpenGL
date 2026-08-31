@@ -12,3 +12,7 @@
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+
+# premake gmake 生成产物(不要提交,本地用 premake5 gmake 重新生成)
+*.make
+Makefile

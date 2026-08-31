@@ -64,12 +64,11 @@ project "OpenGL-Core"
 
 	-- OpenGL-Core 自身要链接的库:它用了 GLFW(窗口/输入)、Glad(GL 函数)、ImGui(调试 UI),
 	-- 以及 Windows 系统的 opengl32.lib(系统 OpenGL 实现)。客户端链接 OpenGL-Core 时也会继承这些依赖。
-	links 
-	{ 
+	links
+	{
 		"GLFW",
 		"Glad",
-		"ImGui",
-		"opengl32.lib"
+		"ImGui"
 	}
 
 	-- filter:按"系统"做差异化设置。仅 Windows 平台下的配置。
@@ -80,6 +79,19 @@ project "OpenGL-Core"
 		{
 			"GLCORE_PLATFORM_WINDOWS",   -- 平台宏,代码里用来判断是否 Windows
 			"GLFW_INCLUDE_NONE"          -- 让 GLFW 不自动包含系统 GL 头,交给 Glad 来管理 GL 头
+		}
+
+		links
+		{
+			"opengl32"
+		}
+
+	-- macOS 平台配置:定义平台宏;系统 OpenGL/Cocoa 框架由最终可执行文件(Sandbox/Examples)链接。
+	filter "system:macosx"
+		defines
+		{
+			"GLCORE_PLATFORM_MACOS",
+			"GLFW_INCLUDE_NONE"
 		}
 
 	-- filter:按"配置"做差异化设置。Debug 配置。

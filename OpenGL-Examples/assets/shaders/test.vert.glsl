@@ -4,9 +4,9 @@
 //       写入到内建输出变量 gl_Position —— 这就是顶点最终在屏幕上的位置。
 // 关键依赖: 由 ExampleLayer 用 Shader::FromGLSLTextFiles 从本文件加载并编译。
 //          外部(C++ 端)会设置 uniform mat4 u_ViewProjection。
-// GLSL 版本: #version 450 core 表示用 OpenGL 4.5 的核心模式 GLSL。
+// GLSL 版本: #version 410 core 表示用 OpenGL 4.1 的核心模式 GLSL(macOS 最高支持 4.1)。
 
-#version 450 core
+#version 410 core
 
 // layout(location = 0) 显式指定这个输入属性的位置为 0,与 C++ 端
 // glEnableVertexAttribArray(0) / glVertexAttribPointer(0, ...) 对应。

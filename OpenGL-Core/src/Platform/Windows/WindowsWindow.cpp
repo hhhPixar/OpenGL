@@ -98,6 +98,15 @@ namespace GLCore {
 		 * 标题(C 字符串,所以用 .c_str() 把 std::string 转成 const char*)、
 		 * 监视器(nullptr=窗口模式)、共享上下文(nullptr=不共享)。
 		 * (int) 是 C 风格转换,把 uint32_t 转回 int 给 GLFW。返回 GLFWwindow*。 */
+		// 请求 OpenGL 3.3 Core profile。macOS 上必须额外加 FORWARD_COMPAT,否则只能
+		// 拿到 legacy 2.1 Metal 上下文,而 ImGui 的 GL3 后端(#version 410)需要 3.2+ core。
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 
 		/* 把刚创建的上下文设为当前线程的当前上下文。必须先做这步,glad 才能
